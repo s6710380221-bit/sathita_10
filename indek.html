@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Thinking - บทเรียนออนไลน์ รายวิชาการออกแบบและเทคโนโลยี ม.2</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#3B82F6',
+                            purple: '#8B5CF6',
+                            orange: '#F97316',
+                            mint: '#10B981',
+                            yellow: '#F59E0B',
+                            bg: '#F8FAFC'
+                        }
+                    },
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom Style Sheet for Modern Animations and Design Tokens -->
+    <style>
+        body {
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            background-color: #F0F4F8;
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px -10px rgba(59, 130, 246, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .animate-float-delayed {
+            animation: float 6s ease-in-out infinite 2s;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Active Navigation Line */
+        .nav-link.active {
+            color: #3B82F6;
+            font-weight: 600;
+        }
+
+        /* Interactive Matching Card Styling */
+        .match-option {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .match-option.selected {
+            border-color: #8B5CF6;
+            background-color: #F3E8FF;
+            transform: scale(1.02);
+        }
+        .match-target {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .match-target.filled {
+            border-style: solid;
+            background-color: #ECFDF5;
+            border-color: #10B981;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-200 selection:text-blue-900">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-card bg-white/85 border-b border-slate-200/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#hero" class="flex items-center space-x-3 group">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
+                        <i class="fa-solid font-bold text-2xl fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent block leading-tight">DESIGN THINKING</span>
+                        <span class="text-xs font-medium text-slate-500">ม.2 การออกแบบและเทคโนโลยี</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-slate-600">
+                    <a href="#hero" class="nav-link hover:text-blue-600 transition-colors py-1">หน้าแรก</a>
+                    <a href="#meaning" class="nav-link hover:text-blue-600 transition-colors py-1">ความหมาย</a>
+                    <a href="#core-concepts" class="nav-link hover:text-blue-600 transition-colors py-1">แนวคิดหลัก 4 ขั้น</a>
+                    <a href="#real-world" class="nav-link hover:text-blue-600 transition-colors py-1">สถานการณ์ตัวอย่าง</a>
+                    <a href="#interactive-activities" class="nav-link hover:text-blue-600 transition-colors py-1">กิจกรรมฝึกคิด</a>
+                    <a href="#quiz-section" class="nav-link hover:text-blue-600 transition-colors py-1">แบบทดสอบ</a>
+                    <a href="#summary" class="nav-link hover:text-blue-600 transition-colors py-1">สรุปบทเรียน</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden">
+                    <button id="mobile-menu-btn" type="button" class="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 focus:outline-none transition-colors" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white/95 border-b border-slate-200 px-4 pt-2 pb-6 space-y-3 shadow-xl transition-all">
+            <a href="#hero" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">หน้าแรก</a>
+            <a href="#meaning" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">ความหมาย</a>
+            <a href="#core-concepts" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">แนวคิดหลัก 4 ขั้น</a>
+            <a href="#real-world" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">สถานการณ์ตัวอย่าง</a>
+            <a href="#interactive-activities" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">กิจกรรมฝึกคิด</a>
+            <a href="#quiz-section" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">แบบทดสอบ</a>
+            <a href="#summary" class="mobile-link block px-4 py-2.5 rounded-xl text-base font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600">สรุปบทเรียน</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+            <!-- Decorative Background Glowing Orbs -->
+            <div class="absolute top-1/4 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-1/3 right-10 w-80 h-80 bg-purple-400/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-10 left-1/3 w-96 h-96 bg-emerald-300/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Text Content -->
+                    <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/80 text-blue-700 text-sm font-semibold shadow-sm border border-blue-200">
+                            <span class="flex h-2.5 w-2.5 rounded-full bg-blue-600 animate-ping"></span>
+                            <i class="fa-solid fa-graduation-cap"></i> บทเรียนออนไลน์ ระดับชั้นมัธยมศึกษาปีที่ 2
+                        </div>
+                        
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+                            DESIGN THINKING
+                            <span class="block text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent mt-2">
+                                “แนวคิดหลักของการคิดเชิงออกแบบ”
+                            </span>
+                        </h1>
+                        
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+                            มาเรียนรู้วิธีคิดอย่างสร้างสรรค์ เพื่อเปลี่ยนปัญหาใกล้ตัวให้กลายเป็นแนวทางแก้ไขที่เหมาะสม เริ่มต้นจากการเข้าใจผู้ใช้ วิเคราะห์ปัญหา คิดค้นแนวทางใหม่ และเรียนรู้จากการทดลอง
+                        </p>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#meaning" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all">
+                                <i class="fa-solid fa-rocket"></i>
+                                <span>เริ่มเรียนรู้</span>
+                            </a>
+                            <a href="#quiz-section" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-white text-slate-700 border-2 border-slate-200 font-bold text-lg hover:border-purple-400 hover:text-purple-600 hover:-translate-y-0.5 transition-all">
+                                <i class="fa-solid fa-pen-to-square text-purple-500"></i>
+                                <span>ทำแบบทดสอบ</span>
+                            </a>
+                        </div>
+
+                        <!-- Highlights Badge -->
+                        <div class="pt-6 border-t border-slate-200/80 grid grid-cols-3 gap-4 text-center lg:text-left">
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600">4 ขั้นตอน</div>
+                                <div class="text-xs text-slate-500">แนวคิดหลักสำคัญ</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-purple-600">1 สถานการณ์</div>
+                                <div class="text-xs text-slate-500">เคสตัวอย่างในชุมชน</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-emerald-600">2 กิจกรรม</div>
+                                <div class="text-xs text-slate-500">ฝึกโต้ตอบ + ทดสอบ</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual Component (3D Cartoon Style Card) -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-md">
+                            <div class="absolute -inset-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400 rounded-3xl blur opacity-30 animate-pulse-slow"></div>
+                            
+                            <div class="relative glass-card rounded-3xl p-8 border border-white/60 shadow-2xl bg-gradient-to-br from-white/90 to-blue-50/50 flex flex-col items-center text-center">
+                                
+                                <!-- Floating Elements Graphic -->
+                                <div class="relative w-48 h-48 my-4 flex items-center justify-center">
+                                    <div class="w-32 h-32 rounded-3xl bg-gradient-to-tr from-yellow-400 to-orange-400 flex items-center justify-center text-white shadow-xl shadow-orange-300/50 animate-float z-10">
+                                        <i class="fa-solid fa-lightbulb text-6xl"></i>
+                                    </div>
+                                    <div class="absolute -top-2 -left-2 w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-400 to-indigo-500 flex items-center justify-center text-white shadow-lg animate-float-delayed">
+                                        <i class="fa-solid fa-gear text-2xl"></i>
+                                    </div>
+                                    <div class="absolute -bottom-2 -right-2 w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-400 to-rose-500 flex items-center justify-center text-white shadow-lg animate-float">
+                                        <i class="fa-solid fa-heart text-2xl"></i>
+                                    </div>
+                                    <div class="absolute top-2 -right-4 w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-400 to-teal-500 flex items-center justify-center text-white shadow-md animate-float-delayed">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+                                    </div>
+                                </div>
+
+                                <h3 class="text-xl font-bold text-slate-800 mt-2">ความคิดสร้างสรรค์ + ผู้ใช้เป็นศูนย์กลาง</h3>
+                                <p class="text-xs text-slate-500 mt-1">หัวใจสำคัญของการออกแบบเทคโนโลยีเพื่อสังคม</p>
+
+                                <div class="mt-6 flex items-center gap-2 px-4 py-2 bg-purple-100/70 rounded-xl text-purple-700 text-xs font-semibold">
+                                    <i class="fa-solid fa-puzzle-piece"></i> คิดวิเคราะห์ &gt; ทดลอง &gt; พัฒนาต่อยอด
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: What is Design Thinking? -->
+        <section id="meaning" class="py-16 bg-white border-y border-slate-200/60 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-blue-600 font-bold tracking-wider uppercase text-sm">บทเรียนส่วนที่ 1</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+                        การคิดเชิงออกแบบ คืออะไร?
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full mt-3"></div>
+                    <p class="text-base sm:text-lg text-slate-600 mt-4 leading-relaxed">
+                        <strong class="text-blue-600 font-semibold">การคิดเชิงออกแบบ (Design Thinking)</strong> คือ แนวทางการแก้ปัญหาอย่างสร้างสรรค์ โดยให้ความสำคัญกับการทำความเข้าใจผู้ใช้ การค้นหาปัญหาที่แท้จริง การสร้างทางเลือก และการทดลองเพื่อพัฒนาแนวทางแก้ปัญหาให้เหมาะสมยิ่งขึ้น
+                    </p>
+                </div>
+
+                <!-- 2 Main Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="glass-card glass-card-hover rounded-3xl p-8 border-t-4 border-t-blue-500 relative overflow-hidden bg-gradient-to-b from-blue-50/40 to-white">
+                        <div class="flex items-start gap-5">
+                            <div class="w-16 h-16 shrink-0 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-blue-500/30">
+                                <i class="fa-solid fa-comments text-amber-300"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-100 px-3 py-1 rounded-full">หลักการที่ 1</span>
+                                <h3 class="text-2xl font-bold text-slate-800 mt-2">เริ่มต้นจากการเข้าใจ</h3>
+                                <p class="text-slate-600 mt-3 leading-relaxed text-sm sm:text-base">
+                                    รับฟัง สังเกต และทำความเข้าใจความต้องการของผู้ใช้ก่อนตัดสินใจ โดยไม่ด่วนเอาความคิดตนเองเป็นหลัก เพื่อค้นพบปัญหาและความรู้สึกที่แท้จริง
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-medium text-slate-500 gap-2">
+                            <i class="fa-solid fa-circle-check text-blue-500"></i> เน้นความรู้สึก ความต้องการ และบริบทของผู้ใช้
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-card glass-card-hover rounded-3xl p-8 border-t-4 border-t-purple-500 relative overflow-hidden bg-gradient-to-b from-purple-50/40 to-white">
+                        <div class="flex items-start gap-5">
+                            <div class="w-16 h-16 shrink-0 rounded-2xl bg-purple-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-purple-500/30">
+                                <i class="fa-solid fa-hammer text-orange-300"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-100 px-3 py-1 rounded-full">หลักการที่ 2</span>
+                                <h3 class="text-2xl font-bold text-slate-800 mt-2">เรียนรู้ผ่านการลงมือทำ</h3>
+                                <p class="text-slate-600 mt-3 leading-relaxed text-sm sm:text-base">
+                                    คิดทางเลือกหลากหลาย สร้างชิ้นงานต้นแบบอย่างง่าย นำไปทดลอง รับฟังข้อเสนอแนะ และปรับปรุงแนวทางแก้ปัญหาให้ดียิ่งขึ้น
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center text-xs font-medium text-slate-500 gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-500"></i> ลงมือสร้างชิ้นงานจริง ทดลอง และเรียนรู้จากข้อผิดพลาด
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 2: Core Concepts (4 Steps) -->
+        <section id="core-concepts" class="py-20 bg-slate-50 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-purple-600 font-bold tracking-wider uppercase text-sm">บทเรียนส่วนที่ 2</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+                        แนวคิดหลักของการคิดเชิงออกแบบ (4 ขั้นตอน)
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-purple-500 to-orange-500 mx-auto rounded-full mt-3"></div>
+                    <p class="text-base text-slate-600 mt-4">
+                        กระบวนการคิดเพื่อแก้ปัญหาแบ่งออกเป็น 4 ขั้นตอนสำคัญ ซึ่งเรียนรู้และนำไปประยุกต์ใช้ได้ง่าย
+                    </p>
+                </div>
+
+                <!-- 4 Steps Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Card 1: Empathy -->
+                    <div class="glass-card glass-card-hover rounded-3xl p-6 bg-white relative flex flex-col justify-between border-t-8 border-blue-500">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-extrabold flex items-center justify-center text-lg">1</span>
+                                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-users-viewfinder"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs font-extrabold text-blue-600 tracking-wider block">EMPATHY</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-0.5 mb-3">เข้าใจผู้ใช้</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                ศึกษาความต้องการ ปัญหา และประสบการณ์ของผู้ที่ได้รับผลกระทบ ผ่านการสังเกต การพูดคุย และการรับฟัง
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+                            <i class="fa-solid fa-key text-blue-500"></i> Keyword: สังเกต, พูดคุย, รับฟัง
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Define -->
+                    <div class="glass-card glass-card-hover rounded-3xl p-6 bg-white relative flex flex-col justify-between border-t-8 border-purple-500">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 font-extrabold flex items-center justify-center text-lg">2</span>
+                                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-bullseye"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs font-extrabold text-purple-600 tracking-wider block">DEFINE</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-0.5 mb-3">วิเคราะห์ปัญหา</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                รวบรวมข้อมูล วิเคราะห์สาเหตุ และระบุปัญหาที่ต้องการแก้ไขให้ชัดเจน
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+                            <i class="fa-solid fa-key text-purple-500"></i> Keyword: รวบรวม, วิเคราะห์สาเหตุ
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Ideate -->
+                    <div class="glass-card glass-card-hover rounded-3xl p-6 bg-white relative flex flex-col justify-between border-t-8 border-orange-500">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 font-extrabold flex items-center justify-center text-lg">3</span>
+                                <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-brain"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs font-extrabold text-orange-600 tracking-wider block">IDEATE</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-0.5 mb-3">สร้างสรรค์ไอเดีย</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                ระดมความคิด สร้างแนวทางแก้ปัญหาหลายรูปแบบ และพิจารณาความเป็นไปได้
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+                            <i class="fa-solid fa-key text-orange-500"></i> Keyword: ระดมความคิด, หลากหลาย
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Prototype & Test -->
+                    <div class="glass-card glass-card-hover rounded-3xl p-6 bg-white relative flex flex-col justify-between border-t-8 border-emerald-500">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 font-extrabold flex items-center justify-center text-lg">4</span>
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-vial-circle-check"></i>
+                                </div>
+                            </div>
+                            <span class="text-xs font-extrabold text-emerald-600 tracking-wider block">PROTOTYPE & TEST</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-0.5 mb-3">ทดลองและปรับปรุง</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                สร้างต้นแบบหรือทดลองแนวทางอย่างง่าย รับฟังความคิดเห็น ประเมินผล และนำข้อมูลมาปรับปรุง
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
+                            <i class="fa-solid fa-key text-emerald-500"></i> Keyword: ต้นแบบ, รับฟังผล, ปรับปรุง
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Non-Linear Process Note Box -->
+                <div class="mt-12 glass-card rounded-2xl p-6 border-l-8 border-l-amber-400 bg-amber-50/60 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-400 text-white flex items-center justify-center text-2xl shrink-0 shadow-md">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-slate-800">📌 หมายเหตุสำคัญ:</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                            การแบ่งเนื้อหาเป็น 4 ด้านนี้เป็นการจัดกลุ่มเพื่อการเรียนรู้ และการคิดเชิงออกแบบสามารถย้อนกลับไปทบทวนหรือปรับปรุงขั้นตอนต่าง ๆ ได้ ไม่จำเป็นต้องเป็นเส้นตรงตายตัว!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 3: Real-world Scenario -->
+        <section id="real-world" class="py-20 bg-white border-y border-slate-200/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-emerald-600 font-bold tracking-wider uppercase text-sm">ลองคิดจากสถานการณ์ใกล้ตัว</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+                        สถานการณ์ตัวอย่างในชีวิตจริง
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full mt-3"></div>
+                    <p class="text-base text-slate-600 mt-4">
+                        เรียนรู้การประยุกต์ใช้ Design Thinking ผ่านปัญหาในชุมชน
+                    </p>
+                </div>
+
+                <!-- Scenario Card Header -->
+                <div class="glass-card rounded-3xl p-8 bg-gradient-to-r from-teal-500 via-emerald-500 to-green-600 text-white shadow-xl mb-12">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="space-y-3">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white/20 text-xs font-semibold backdrop-blur-md">
+                                <i class="fa-solid fa-house-chimney-window"></i> ปัญหาใกล้ตัวในชุมชน
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold">หัวข้อสถานการณ์: “แมลงวันก่อโรคในชุมชน”</h3>
+                            <p class="text-sm sm:text-base text-emerald-50 leading-relaxed max-w-3xl">
+                                พบแมลงวันจำนวนมากบริเวณที่ทิ้งขยะหรือพื้นที่ประกอบอาหาร ทำให้คนในชุมชนกังวลเกี่ยวกับความสะอาดและสุขอนามัย
+                            </p>
+                        </div>
+                        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white/10 backdrop-blur-md border border-white/30 flex items-center justify-center text-5xl shrink-0">
+                            🪰
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Steps Applied in Real Situation -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Step 1 Applied -->
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:shadow-md transition-shadow relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center text-xs font-bold">1</div>
+                            <h4 class="font-bold text-slate-800 text-sm">1. ทำความเข้าใจผู้เกี่ยวข้อง</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            สำรวจว่าใครได้รับผลกระทบบ้าง เช่น <strong class="text-blue-600">คนในชุมชน ผู้ขายอาหาร และผู้ดูแลพื้นที่</strong> เพื่อรับฟังปัญหาและความกังวล
+                        </p>
+                    </div>
+
+                    <!-- Step 2 Applied -->
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:shadow-md transition-shadow relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500 text-white flex items-center justify-center text-xs font-bold">2</div>
+                            <h4 class="font-bold text-slate-800 text-sm">2. ค้นหาสาเหตุและความต้องการ</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            <strong class="text-purple-600">สังเกตพื้นที่ สอบถามผู้เกี่ยวข้อง และรวบรวมข้อมูล</strong> เพื่อระบุให้แน่ชัดว่ากลิ่นขยะเปียกและขยะไม่มีฝาปิดคือต้นเหตุหลัก
+                        </p>
+                    </div>
+
+                    <!-- Step 3 Applied -->
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:shadow-md transition-shadow relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center text-xs font-bold">3</div>
+                            <h4 class="font-bold text-slate-800 text-sm">3. ระดมแนวทางแก้ปัญหา</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            คิดวิธีต่าง ๆ เช่น <strong class="text-orange-600">ปิดฝาถังขยะ จัดตารางทำความสะอาด และให้ความรู้เกี่ยวกับการจัดการขยะ</strong> ในชุมชน
+                        </p>
+                    </div>
+
+                    <!-- Step 4 Applied -->
+                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/80 hover:shadow-md transition-shadow relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-xs font-bold">4</div>
+                            <h4 class="font-bold text-slate-800 text-sm">4. เลือก ทดลอง และปรับปรุง</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            <strong class="text-emerald-600">เปรียบเทียบข้อดี ข้อจำกัด ค่าใช้จ่าย และทรัพยากร</strong> ก่อนทดลองแนวทางที่เหมาะสมและปรับปรุงตามผลที่ได้
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 4: Interactive Activities -->
+        <section id="interactive-activities" class="py-20 bg-slate-100/70 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-orange-600 font-bold tracking-wider uppercase text-sm">กิจกรรมมีส่วนร่วม</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+                        กิจกรรมฝึกคิดแบบโต้ตอบ (Interactive)
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-orange-500 to-yellow-500 mx-auto rounded-full mt-3"></div>
+                    <p class="text-base text-slate-600 mt-4">
+                        ทดลองประยุกต์ความรู้กับกิจกรรมจำลอง เพื่อทบทวนความเข้าใจ
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    
+                    <!-- Activity 1: Choose the Concept -->
+                    <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/80 bg-white shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-lg font-bold shadow-md shadow-orange-500/30">
+                                    1
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-800">กิจกรรมที่ 1: เลือกวิธีคิด</h3>
+                                    <p class="text-xs text-slate-500">เลือกคำตอบที่ถูกต้องที่สุดตามหลัก Design Thinking</p>
+                                </div>
+                            </div>
+
+                            <!-- Question Box -->
+                            <div class="p-4 rounded-2xl bg-orange-50 border border-orange-200 mb-6">
+                                <p class="text-sm sm:text-base font-semibold text-slate-800">
+                                    ❓ คำถาม: “ถ้าต้องการแก้ปัญหาขยะล้นถังในโรงเรียน ควรเริ่มต้นอย่างไร?”
+                                </p>
+                            </div>
+
+                            <!-- Options Buttons -->
+                            <div class="space-y-3" id="act1-options">
+                                <button onclick="checkActivity1(0)" class="act1-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-orange-400 hover:bg-orange-50/50 transition-all text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-between">
+                                    <span>- รีบซื้อถังขยะเพิ่มทันทีโดยไม่ต้องสำรวจ</span>
+                                    <i class="fa-regular fa-circle text-slate-400"></i>
+                                </button>
+                                <button onclick="checkActivity1(1)" class="act1-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-orange-400 hover:bg-orange-50/50 transition-all text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-between">
+                                    <span>- สังเกตพื้นที่และสอบถามผู้ใช้เพื่อเข้าใจสาเหตุ</span>
+                                    <i class="fa-regular fa-circle text-slate-400"></i>
+                                </button>
+                                <button onclick="checkActivity1(2)" class="act1-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-orange-400 hover:bg-orange-50/50 transition-all text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-between">
+                                    <span>- เลือกวิธีที่ตนเองชอบที่สุดเพียงวิธีเดียว</span>
+                                    <i class="fa-regular fa-circle text-slate-400"></i>
+                                </button>
+                            </div>
+
+                            <!-- Activity 1 Feedback Alert -->
+                            <div id="act1-feedback" class="hidden mt-6 p-4 rounded-2xl text-xs sm:text-sm font-medium transition-all"></div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+                            <button onclick="resetActivity1()" class="text-xs text-slate-500 hover:text-orange-600 underline font-medium">
+                                <i class="fa-solid fa-rotate-right"></i> รีเซ็ตคำตอบ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Activity 2: Interactive Concept Matching -->
+                    <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/80 bg-white shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-2xl bg-purple-500 text-white flex items-center justify-center text-lg font-bold shadow-md shadow-purple-500/30">
+                                    2
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-800">กิจกรรมที่ 2: จับคู่แนวคิด</h3>
+                                    <p class="text-xs text-slate-500">คลิกเลือก "แนวคิด" ด้านบน แล้วคลิกเลือก "การกระทำ" ด้านล่างให้สอดคล้องกัน</p>
+                                </div>
+                            </div>
+
+                            <!-- Options Pool (Source) -->
+                            <div class="mb-6">
+                                <label class="text-xs font-bold text-slate-500 uppercase block mb-2">1. คลิกเลือกแนวคิด:</label>
+                                <div class="flex flex-wrap gap-2" id="match-options-pool">
+                                    <div class="match-option px-3 py-2 rounded-xl bg-blue-100 text-blue-700 text-xs font-bold border-2 border-blue-300" data-concept="เข้าใจผู้ใช้">
+                                        เข้าใจผู้ใช้
+                                    </div>
+                                    <div class="match-option px-3 py-2 rounded-xl bg-orange-100 text-orange-700 text-xs font-bold border-2 border-orange-300" data-concept="สร้างสรรค์ไอเดีย">
+                                        สร้างสรรค์ไอเดีย
+                                    </div>
+                                    <div class="match-option px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 text-xs font-bold border-2 border-emerald-300" data-concept="ทดลองและปรับปรุง">
+                                        ทดลองและปรับปรุง
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Targets List -->
+                            <div class="space-y-3">
+                                <label class="text-xs font-bold text-slate-500 uppercase block">2. นำมาจับคู่กับการกระทำด้านล่าง:</label>
+                                
+                                <div class="match-target p-3.5 rounded-2xl border-2 border-dashed border-slate-300 hover:border-purple-400 bg-slate-50" data-target="0">
+                                    <div class="text-xs text-slate-700 font-medium">🗣️ พูดคุยกับผู้ใช้เพื่อฟังปัญหา</div>
+                                    <div class="matched-box text-xs font-bold text-purple-600 mt-1 hidden"></div>
+                                </div>
+
+                                <div class="match-target p-3.5 rounded-2xl border-2 border-dashed border-slate-300 hover:border-purple-400 bg-slate-50" data-target="1">
+                                    <div class="text-xs text-slate-700 font-medium">💡 คิดวิธีแก้ปัญหาหลายแบบ</div>
+                                    <div class="matched-box text-xs font-bold text-purple-600 mt-1 hidden"></div>
+                                </div>
+
+                                <div class="match-target p-3.5 rounded-2xl border-2 border-dashed border-slate-300 hover:border-purple-400 bg-slate-50" data-target="2">
+                                    <div class="text-xs text-slate-700 font-medium">🛠️ ทดลองวิธีและนำผลมาปรับปรุง</div>
+                                    <div class="matched-box text-xs font-bold text-purple-600 mt-1 hidden"></div>
+                                </div>
+                            </div>
+
+                            <!-- Activity 2 Feedback -->
+                            <div id="act2-feedback" class="hidden mt-4 p-3 rounded-2xl text-xs font-medium"></div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <button onclick="resetActivity2()" class="text-xs text-slate-500 hover:text-purple-600 underline font-medium">
+                                <i class="fa-solid fa-rotate-right"></i> รีเซ็ตจับคู่
+                            </button>
+                            <button onclick="checkActivity2()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-all">
+                                <i class="fa-solid fa-check-double"></i> ตรวจคำตอบ
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 5: Quiz Section -->
+        <section id="quiz-section" class="py-20 bg-white relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="text-blue-600 font-bold tracking-wider uppercase text-sm">การประเมินผล</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+                        แบบทดสอบท้ายบท
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto rounded-full mt-3"></div>
+                    <p class="text-sm sm:text-base text-slate-600 mt-3">
+                        ทดสอบความรู้ 5 ข้อ เพื่อวัดความเข้าใจหลังเรียนเรื่อง Design Thinking
+                    </p>
+                </div>
+
+                <!-- Main Quiz Box Container -->
+                <div class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-2xl bg-gradient-to-b from-white to-slate-50/50">
+                    
+                    <!-- Progress Bar & Status -->
+                    <div class="mb-8" id="quiz-header">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-2">
+                            <span id="quiz-progress-text">ข้อที่ 1 จาก 5 ข้อ</span>
+                            <span id="quiz-score-badge" class="text-blue-600">คะแนนสะสม: 0</span>
+                        </div>
+                        <div class="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                            <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-blue-500 to-purple-500 w-1/5 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Active Question View -->
+                    <div id="quiz-body">
+                        <!-- Question Title -->
+                        <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-800 mb-6 leading-snug">
+                            1. จุดเริ่มต้นสำคัญของการคิดเชิงออกแบบคืออะไร?
+                        </h3>
+
+                        <!-- Choices List -->
+                        <div class="space-y-3" id="choices-container">
+                            <!-- Injected dynamically via JS -->
+                        </div>
+
+                        <!-- Feedback Box (After click Check) -->
+                        <div id="quiz-explanation" class="hidden mt-6 p-4 rounded-2xl text-xs sm:text-sm font-medium border"></div>
+
+                        <!-- Quiz Action Buttons -->
+                        <div class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
+                            <span class="text-xs text-slate-400">กรุณาเลือกคำตอบแล้วกด "ตรวจคำตอบ"</span>
+                            <button id="quiz-action-btn" onclick="submitQuizAnswer()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                ตรวจคำตอบ <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Result Summary View (Hidden by default) -->
+                    <div id="quiz-result" class="hidden text-center py-8 space-y-6">
+                        <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-yellow-300 to-amber-500 text-white flex items-center justify-center text-5xl shadow-xl shadow-amber-300/40">
+                            🏆
+                        </div>
+                        <div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-800">สรุปผลการทำแบบทดสอบ</h3>
+                            <p class="text-slate-500 text-sm mt-1">ยินดีด้วย! คุณเรียนรู้และทำแบบทดสอบจบเรียบร้อยแล้ว</p>
+                        </div>
+
+                        <!-- Score Card Display -->
+                        <div class="max-w-xs mx-auto p-6 rounded-3xl bg-blue-50 border-2 border-blue-200 text-center">
+                            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">คะแนนของคุณ</span>
+                            <div class="text-5xl font-black text-blue-700 my-2" id="final-score-text">0 / 5</div>
+                            <div class="text-xs font-semibold text-slate-600" id="final-score-eval">ยอดเยี่ยมมาก!</div>
+                        </div>
+
+                        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button onclick="restartQuiz()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> ทำใหม่อีกครั้ง
+                            </button>
+                            <a href="#summary" class="px-8 py-3.5 rounded-2xl bg-slate-100 text-slate-700 font-bold text-sm hover:bg-slate-200 transition-all">
+                                ดูสรุปบทเรียน
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 6: Summary -->
+        <section id="summary" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-blue-400 font-bold tracking-wider uppercase text-sm">ส่วนสรุปบทเรียน</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-1">
+                        สรุปสาระสำคัญ Design Thinking
+                    </h2>
+                    <div class="w-20 h-1.5 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full mt-3"></div>
+                </div>
+
+                <!-- 3 Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    
+                    <div class="bg-slate-800/80 rounded-3xl p-8 border border-slate-700/80 hover:border-blue-500/50 transition-all">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-3xl mb-6">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">เข้าใจคนก่อน</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            รับฟังและสังเกตผู้ที่ได้รับผลกระทบ เพื่อทำความเข้าใจปัญหาและความต้องการที่แท้จริง
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 rounded-3xl p-8 border border-slate-700/80 hover:border-purple-500/50 transition-all">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-3xl mb-6">
+                            <i class="fa-solid fa-magnifying-glass font-bold"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">มองปัญหาให้ชัด</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            ใช้ข้อมูลค้นหาสาเหตุและความต้องการ รวบรวมข้อมูล วิเคราะห์ และระบุปัญหาให้ตรงจุด
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-800/80 rounded-3xl p-8 border border-slate-700/80 hover:border-emerald-500/50 transition-all">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl mb-6">
+                            <i class="fa-solid fa-arrows-spin"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">ทดลองแล้วพัฒนา</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            สร้างต้นแบบอย่างง่าย รับฟังข้อเสนอแนะ และปรับแนวทางให้เหมาะสมกับการใช้งานจริง
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Reflective Question Box -->
+                <div class="bg-gradient-to-r from-blue-900/60 via-purple-900/60 to-slate-800 rounded-3xl p-8 border border-purple-500/30 text-center max-w-3xl mx-auto">
+                    <div class="text-3xl mb-3">💡</div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-amber-300">คำถามชวนคิดสำหรับนักเรียน</h3>
+                    <p class="text-base sm:text-lg text-slate-200 mt-2 font-medium leading-relaxed">
+                        “ในโรงเรียนของเรา มีปัญหาอะไรที่อยากแก้ไข และเราจะเริ่มจากการเข้าใจผู้ใช้ได้อย่างไร?”
+                    </p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <p class="text-sm font-semibold text-slate-300">
+                สื่อการเรียนรู้สำหรับนักเรียนระดับชั้นมัธยมศึกษาปีที่ 2
+            </p>
+            <p class="text-xs text-slate-500">
+                รายวิชาการออกแบบและเทคโนโลยี | พัฒนาขึ้นเพื่อส่งเสริมกระบวนการคิดเชิงออกแบบ (Design Thinking)
+            </p>
+
+            <!-- Back To Top Button -->
+            <div class="pt-4">
+                <a href="#hero" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-800 text-slate-300 hover:bg-blue-600 hover:text-white transition-all text-xs font-bold border border-slate-700">
+                    <i class="fa-solid fa-arrow-up"></i> กลับไปด้านบน
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- Mobile Navigation Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        // --- Activity 1 Logic ---
+        let act1Answered = false;
+        function checkActivity1(index) {
+            if (act1Answered) return;
+
+            const feedbackEl = document.getElementById('act1-feedback');
+            const buttons = document.querySelectorAll('.act1-btn');
+            
+            buttons.forEach((btn, idx) => {
+                if (idx === index) {
+                    if (index === 1) {
+                        btn.classList.remove('border-slate-200');
+                        btn.classList.add('border-emerald-500', 'bg-emerald-50');
+                        btn.querySelector('i').className = 'fa-solid fa-circle-check text-emerald-500';
+                    } else {
+                        btn.classList.remove('border-slate-200');
+                        btn.classList.add('border-rose-400', 'bg-rose-50');
+                        btn.querySelector('i').className = 'fa-solid fa-circle-xmark text-rose-500';
+                    }
+                }
+            });
+
+            feedbackEl.classList.remove('hidden');
+            if (index === 1) {
+                act1Answered = true;
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl text-xs sm:text-sm font-medium bg-emerald-100 text-emerald-800 border border-emerald-300';
+                feedbackEl.innerHTML = '<i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> <strong>ถูกต้องแล้วครับ! 🎉</strong> การเริ่มต้นที่ดีที่สุดตามหลัก Design Thinking คือการ "สังเกตพื้นที่และสอบถามผู้ใช้เพื่อเข้าใจสาเหตุ" เพื่อหาต้นเหตุที่แท้จริงก่อนลงมือแก้ไข';
+            } else {
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl text-xs sm:text-sm font-medium bg-rose-100 text-rose-800 border border-rose-300';
+                feedbackEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1 text-rose-600"></i> <strong>ยังไม่ถูกต้องครับ!</strong> การด่วนซื้ออุปกรณ์เพิ่มหรือเลือกวิธีที่ตนชอบโดยไม่สำรวจก่อน อาจทำให้แก้ปัญหาได้ไม่ตรงจุด ลองเลือกใหม่อีกครั้งนะ!';
+            }
+        }
+
+        function resetActivity1() {
+            act1Answered = false;
+            const feedbackEl = document.getElementById('act1-feedback');
+            const buttons = document.querySelectorAll('.act1-btn');
+            
+            feedbackEl.classList.add('hidden');
+            buttons.forEach(btn => {
+                btn.className = 'act1-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-orange-400 hover:bg-orange-50/50 transition-all text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-between';
+                btn.querySelector('i').className = 'fa-regular fa-circle text-slate-400';
+            });
+        }
+
+        // --- Activity 2: Interactive Concept Matching Logic ---
+        let selectedConcept = null;
+        let matchedPairs = { 0: null, 1: null, 2: null };
+
+        const optionCards = document.querySelectorAll('.match-option');
+        const targetCards = document.querySelectorAll('.match-target');
+
+        optionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                optionCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedConcept = card.getAttribute('data-concept');
+            });
+        });
+
+        targetCards.forEach(target => {
+            target.addEventListener('click', () => {
+                if (!selectedConcept) {
+                    alert('กรุณาคลิกเลือกแนวคิดภาษาไทยด้านบนก่อนครับ!');
+                    return;
+                }
+                const targetIdx = target.getAttribute('data-target');
+                matchedPairs[targetIdx] = selectedConcept;
+
+                const matchBox = target.querySelector('.matched-box');
+                matchBox.textContent = `📌 จับคู่กับ: ${selectedConcept}`;
+                matchBox.classList.remove('hidden');
+                target.classList.add('filled');
+            });
+        });
+
+        function checkActivity2() {
+            const feedbackEl = document.getElementById('act2-feedback');
+            feedbackEl.classList.remove('hidden');
+
+            const correctAnswers = {
+                0: "เข้าใจผู้ใช้",
+                1: "สร้างสรรค์ไอเดีย",
+                2: "ทดลองและปรับปรุง"
+            };
+
+            let score = 0;
+            let total = 3;
+
+            for (let i = 0; i < total; i++) {
+                if (matchedPairs[i] === correctAnswers[i]) {
+                    score++;
+                }
+            }
+
+            if (score === 3) {
+                feedbackEl.className = 'mt-4 p-3 rounded-2xl text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-300';
+                feedbackEl.innerHTML = `🎉 <strong>ถูกต้องครบทั้ง 3 ข้อ! (${score}/${total} คะแนน)</strong> คุณเข้าใจการจับคู่การกระทำกับแนวคิด Design Thinking ได้อย่างยอดเยี่ยม!`;
+            } else {
+                feedbackEl.className = 'mt-4 p-3 rounded-2xl text-xs font-medium bg-amber-100 text-amber-800 border border-amber-300';
+                feedbackEl.innerHTML = `⚠️ <strong>ได้ ${score}/${total} คะแนน</strong> ลองตรวจสอบอีกครั้ง: <br>• พูดคุยกับผู้ใช้ → เข้าใจผู้ใช้ <br>• คิดวิธีแก้หลายแบบ → สร้างสรรค์ไอเดีย <br>• ทดลองวิธีและนำผลมาปรับปรุง → ทดลองและปรับปรุง`;
+            }
+        }
+
+        function resetActivity2() {
+            selectedConcept = null;
+            matchedPairs = { 0: null, 1: null, 2: null };
+            optionCards.forEach(c => c.classList.remove('selected'));
+            targetCards.forEach(target => {
+                target.classList.remove('filled');
+                const matchBox = target.querySelector('.matched-box');
+                matchBox.classList.add('hidden');
+                matchBox.textContent = '';
+            });
+            const feedbackEl = document.getElementById('act2-feedback');
+            feedbackEl.classList.add('hidden');
+        }
+
+        // --- Section 5: Quiz Questions Data & Interactive Engine ---
+        const quizQuestions = [
+            {
+                question: "1. จุดเริ่มต้นสำคัญของการคิดเชิงออกแบบคืออะไร?",
+                choices: [
+                    "การเร่งสร้างชิ้นงานโดยเร็วที่สุด",
+                    "การทำความเข้าใจผู้ใช้และความต้องการอย่างลึกซึ้ง (Empathy)",
+                    "การหาเงินทุนจำนวนมากมาใช้อุปกรณ์ราคาแพง",
+                    "การยึดถือความคิดของตนเองเป็นหลักในการตัดสินใจ"
+                ],
+                correct: 1,
+                explanation: "จุดเริ่มต้นสำคัญที่สุดของ Design Thinking คือ Empathy (เข้าใจผู้ใช้) โดยรับฟังและสังเกตเพื่อเข้าถึงปัญหาและความต้องการจริง"
+            },
+            {
+                question: "2. เพราะเหตุใดจึงควรวิเคราะห์ปัญหาก่อนเลือกวิธีแก้?",
+                choices: [
+                    "เพื่อค้นหาสาเหตุที่แท้จริงและระบุปัญหาให้ชัดเจนตรงจุด",
+                    "เพื่อหลีกเลี่ยงการพูดคุยกับผู้ใช้งาน",
+                    "เพื่อกำหนดวิธีที่แพงที่สุดในการแก้ไขปัญหา",
+                    "เพื่อเลื่อนเวลาทำงานให้นานขึ้น"
+                ],
+                correct: 0,
+                explanation: "การวิเคราะห์ปัญหา (Define) ช่วยรวบรวมข้อมูลและค้นหาสาเหตุที่แท้จริง ทำให้แก้ไขปัญหาได้ถูกทาง ไม่แก้ปัญหาผิดจุด"
+            },
+            {
+                question: "3. การระดมความคิด (Ideate) มีประโยชน์อย่างไร?",
+                choices: [
+                    "ช่วยจำกัดกรอบความคิดให้อยู่ในแบบเดิมๆ",
+                    "ช่วยคิดค้นแนวทางแก้ปัญหาหลายรูปแบบและเปิดกว้างมุมมองใหม่ๆ",
+                    "ช่วยคัดค้านความคิดของผู้อื่นทันที",
+                    "ช่วยให้เลือกทำตามคำสั่งเพียงอย่างเดียว"
+                ],
+                correct: 1,
+                explanation: "การระดมความคิดช่วยให้ได้ทางเลือกที่หลากหลาย ปลดล็อกความคิดสร้างสรรค์ใหม่ๆ ก่อนตัดสินใจเลือกทางเลือกที่ดีที่สุด"
+            },
+            {
+                question: "4. หลังทดลองแนวทางแก้ปัญหาแล้ว ควรทำอย่างไร?",
+                choices: [
+                    "หยุดทำทันทีโดยไม่สนใจข้อเสนอแนะ",
+                    "รับฟังความคิดเห็น ประเมินผล และนำข้อมูลมาปรับปรุง",
+                    "บังคับให้ทุกคนต้องใช้แม้ว่าจะพบข้อผิดพลาด",
+                    "ทิ้งชิ้นงานต้นแบบไปโดยไม่เรียนรู้อะไร"
+                ],
+                correct: 1,
+                explanation: "ในขั้น Prototype & Test เมื่อนำไปทดลองแล้ว ต้องรับฟังความคิดเห็นและนำผลลัพธ์มาปรับปรุงพัฒนาต่อยอดให้สมบูรณ์ยิ่งขึ้น"
+            },
+            {
+                question: "5. ข้อใดเป็นตัวอย่างการคิดเชิงออกแบบในชุมชน?",
+                choices: [
+                    "การสังเกต สอบถามชาวบ้าน แล้วคิดสร้างถังขยะคัดแยกแบบเหยียบเพื่อลดการสัมผัส",
+                    "การสั่งซื้อถังขยะมาตั้งเพิ่มโดยไม่เคยถามความต้องการของคนในชุมชน",
+                    "การรวบรวมขยะทุกประเภทเทใส่ถังเดียวกันเพื่อความรวดเร็ว",
+                    "การห้ามคนในชุมชนทิ้งขยะโดยไม่มีมาตรการรองรับ"
+                ],
+                correct: 0,
+                explanation: "การสังเกต สอบถามผู้ใช้ และสร้างถังขยะแบบเหยียบ ถือเป็นการประยุกต์ Design Thinking ที่เริ่มต้นจากผู้ใช้และสร้างนวัตกรรมที่ตอบโจทย์"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedChoice = null;
+        let quizScore = 0;
+        let isAnswerChecked = false;
+
+        function loadQuestion() {
+            isAnswerChecked = false;
+            selectedChoice = null;
+
+            const q = quizQuestions[currentQuestionIndex];
+            document.getElementById('quiz-progress-text').textContent = `ข้อที่ ${currentQuestionIndex + 1} จาก ${quizQuestions.length} ข้อ`;
+            document.getElementById('quiz-score-badge').textContent = `คะแนนสะสม: ${quizScore}`;
+            document.getElementById('quiz-progress-bar').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+
+            document.getElementById('question-text').textContent = q.question;
+
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+
+            q.choices.forEach((choice, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'quiz-choice-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-between';
+                btn.onclick = () => selectChoice(idx);
+                btn.innerHTML = `
+                    <span>${choice}</span>
+                    <i class="fa-regular fa-circle text-slate-300 choice-icon"></i>
+                `;
+                choicesContainer.appendChild(btn);
+            });
+
+            const explanationBox = document.getElementById('quiz-explanation');
+            explanationBox.classList.add('hidden');
+
+            const actionBtn = document.getElementById('quiz-action-btn');
+            actionBtn.innerHTML = 'ตรวจคำตอบ <i class="fa-solid fa-arrow-right ml-1"></i>';
+            actionBtn.disabled = true;
+        }
+
+        function selectChoice(index) {
+            if (isAnswerChecked) return;
+
+            selectedChoice = index;
+            const buttons = document.querySelectorAll('.quiz-choice-btn');
+
+            buttons.forEach((btn, idx) => {
+                const icon = btn.querySelector('.choice-icon');
+                if (idx === index) {
+                    btn.className = 'quiz-choice-btn w-full text-left p-4 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-900 font-semibold transition-all text-xs sm:text-sm flex items-center justify-between';
+                    icon.className = 'fa-solid fa-circle-dot text-blue-600 choice-icon';
+                } else {
+                    btn.className = 'quiz-choice-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all text-xs sm:text-sm font-medium text-slate-700 flex items-center justify-between';
+                    icon.className = 'fa-regular fa-circle text-slate-300 choice-icon';
+                }
+            });
+
+            document.getElementById('quiz-action-btn').disabled = false;
+        }
+
+        function submitQuizAnswer() {
+            const actionBtn = document.getElementById('quiz-action-btn');
+            
+            if (!isAnswerChecked) {
+                if (selectedChoice === null) return;
+
+                isAnswerChecked = true;
+                const q = quizQuestions[currentQuestionIndex];
+                const buttons = document.querySelectorAll('.quiz-choice-btn');
+                const explanationBox = document.getElementById('quiz-explanation');
+
+                buttons.forEach((btn, idx) => {
+                    btn.disabled = true;
+                    if (idx === q.correct) {
+                        btn.className = 'quiz-choice-btn w-full text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold transition-all text-xs sm:text-sm flex items-center justify-between';
+                        btn.querySelector('.choice-icon').className = 'fa-solid fa-circle-check text-emerald-600 choice-icon';
+                    } else if (idx === selectedChoice) {
+                        btn.className = 'quiz-choice-btn w-full text-left p-4 rounded-2xl border-2 border-rose-400 bg-rose-50 text-rose-900 font-medium transition-all text-xs sm:text-sm flex items-center justify-between';
+                        btn.querySelector('.choice-icon').className = 'fa-solid fa-circle-xmark text-rose-500 choice-icon';
+                    }
+                });
+
+                if (selectedChoice === q.correct) {
+                    quizScore++;
+                    explanationBox.className = 'mt-6 p-4 rounded-2xl text-xs sm:text-sm font-medium bg-emerald-100 text-emerald-800 border border-emerald-300';
+                    explanationBox.innerHTML = `✨ <strong>ถูกต้อง!</strong> ${q.explanation}`;
+                } else {
+                    explanationBox.className = 'mt-6 p-4 rounded-2xl text-xs sm:text-sm font-medium bg-rose-100 text-rose-800 border border-rose-300';
+                    explanationBox.innerHTML = `❌ <strong>ยังไม่ถูกต้อง!</strong> ${q.explanation}`;
+                }
+
+                explanationBox.classList.remove('hidden');
+                document.getElementById('quiz-score-badge').textContent = `คะแนนสะสม: ${quizScore}`;
+
+                if (currentQuestionIndex < quizQuestions.length - 1) {
+                    actionBtn.innerHTML = 'ข้อต่อไป <i class="fa-solid fa-chevron-right ml-1"></i>';
+                } else {
+                    actionBtn.innerHTML = 'ดูสรุปผลคะแนน <i class="fa-solid fa-trophy ml-1"></i>';
+                }
+            } else {
+                if (currentQuestionIndex < quizQuestions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-header').classList.add('hidden');
+            document.getElementById('quiz-body').classList.add('hidden');
+            
+            const resultBox = document.getElementById('quiz-result');
+            resultBox.classList.remove('hidden');
+
+            document.getElementById('final-score-text').textContent = `${quizScore} / ${quizQuestions.length}`;
+
+            const evalText = document.getElementById('final-score-eval');
+            if (quizScore === 5) {
+                evalText.textContent = "🌟 ยอดเยี่ยมมาก! คุณเข้าใจแนวคิดหลัก Design Thinking เป็นอย่างดี";
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 120,
+                        spread: 80,
+                        origin: { y: 0.6 }
+                    });
+                }
+            } else if (quizScore >= 3) {
+                evalText.textContent = "👍 เก่งมาก! คุณผ่านเกณฑ์การเรียนรู้เรื่อง Design Thinking";
+            } else {
+                evalText.textContent = "📚 พยายามอีกนิดนะ! ลองย้อนกลับไปทบทวนบทเรียนแล้วกดทำใหม่อีกครั้งได้เลย";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            quizScore = 0;
+            selectedChoice = null;
+            isAnswerChecked = false;
+
+            document.getElementById('quiz-header').classList.remove('hidden');
+            document.getElementById('quiz-body').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+
+            loadQuestion();
+        }
+
+        // Initialize quiz on DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>
